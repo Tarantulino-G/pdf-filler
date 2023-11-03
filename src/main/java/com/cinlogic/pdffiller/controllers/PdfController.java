@@ -50,6 +50,13 @@ public class PdfController {
             if (!fieldErrors.isEmpty()) {
                 throw new IOException(String.join("\n", fieldErrors));
             }
+            if (request.getFlatten()){
+               try{
+                  pdf.flatten();
+               } catch (Exception e) {
+                    fieldErrors.add(e.getMessage());
+               }
+            }
             var filename = FilenameUtils.getName(request.getUrl());
             return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=" + filename).body(pdf.getBytes());
         }

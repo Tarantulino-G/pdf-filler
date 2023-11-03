@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class FillRequest {
     private String url;
+    private boolean flatten;
     private Map<String, Object> values;
 
     public String getUrl() {
@@ -28,6 +29,14 @@ public class FillRequest {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFlatten() {
+        return flatten;
+    }
+
+    public void setFlatten(boolean flatten) {
+        this.flatten = flatten;
     }
 
     public Map<String, Object> getValues() {

@@ -31,7 +31,7 @@ public class FillRequest {
         this.url = url;
     }
 
-    public String getFlatten() {
+    public boolean getFlatten() {
         return flatten;
     }
 

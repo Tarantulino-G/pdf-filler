@@ -39,7 +39,7 @@ public class PdfController {
     @ResponseBody
     public ResponseEntity<byte[]> fill(@RequestBody FillRequest request) throws IOException {
         var fieldErrors = new ArrayList<String>();
-        try (var pdf = new PdfDocument(request.getUrl())) {
+        try (var pdf = new PdfDocument(request.getUrl(), request.getFlatten())) {
             for (var name : request.getValues().keySet()) {
                 try {
                     pdf.setFieldValue(name, request.getValues().get(name));
@@ -50,13 +50,7 @@ public class PdfController {
             if (!fieldErrors.isEmpty()) {
                 throw new IOException(String.join("\n", fieldErrors));
             }
-            if (request.getFlatten()){
-               try{
-                  pdf.flatten();
-               } catch (Exception e) {
-                    fieldErrors.add(e.getMessage());
-               }
-            }
+
             var filename = FilenameUtils.getName(request.getUrl());
             return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=" + filename).body(pdf.getBytes());
         }

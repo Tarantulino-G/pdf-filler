@@ -31,9 +31,19 @@ public class PdfDocument implements Closeable {
 
     private final PDDocument doc;
     private final PDAcroForm form;
+    private boolean flatten=false;
 
+    public PdfDocument(String url, boolean flatten) throws IOException {
+        this(new URL(url).openStream(), flatten);
+    }
     public PdfDocument(String url) throws IOException {
         this(new URL(url).openStream());
+    }
+
+    public PdfDocument(InputStream pdfStream, boolean toFlatten) throws IOException {
+        doc = PDDocument.load(pdfStream);
+        form = doc.getDocumentCatalog().getAcroForm();
+        flatten = toFlatten;
     }
 
     public PdfDocument(InputStream pdfStream) throws IOException {
@@ -55,6 +65,9 @@ public class PdfDocument implements Closeable {
 
     public byte[] getBytes() throws IOException {
         try (var os = new ByteArrayOutputStream()) {
+            if (flatten){
+                form.flatten();
+             }
             doc.save(os);
             return os.toByteArray();
         }
